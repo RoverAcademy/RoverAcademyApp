@@ -64,26 +64,26 @@ pubspec.yaml: Dependencies and metadata for the Flutter project.
 
 analysis_options.yaml: Defines custom linting rules.
 
-Contributing
+**Contributing**
 
 We welcome contributions to Rover Academy! To contribute:
 
-Fork the repository.
+**Fork the repository.**
 
-Create a new branch:
+**Create a new branch:**
 
 git checkout -b feature-name
 
-Make changes and commit:
+**Make changes and commit:**
 
 git commit -m "Description of changes"
 
-Push to your branch:
+**Push to your branch:**
 
 git push origin feature-name
 
-Submit a pull request.
+**Submit a pull request.**
 
-License
+**License**
 
 This project is licensed under the MIT License. See the LICENSE file for details.
