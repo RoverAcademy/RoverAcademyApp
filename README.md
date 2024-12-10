@@ -1,48 +1,68 @@
 **Rover Academy**
 
-Welcome to Rover Academy, an innovative mobile app designed to gamify learning for children. The app focuses on engaging young learners in subjects like math, history, science, and language arts by providing an interactive, fun-filled experience. The app is built using Flutter and FlutterFlow, ensuring a seamless and efficient cross-platform experience.
+By Umer Rizwan, Samir Issa, Alex Jin
+
+Easton Area High School  
+
+Easton, PA
+
+Welcome to Rover Academy, an innovative mobile app designed to gamify learning for children. This app focuses on making education engaging and interactive, featuring subjects like math, history, science, and language arts. It is a cross-platform mobile application for Android and iOS devices, providing a seamless and fun educational experience.
 
 **Features**
 
-Sign In/Sign Up Page: Secure and user-friendly authentication for new and existing users.
+Designed for Android and iOS devices
 
-Math Quiz: Interactive quizzes to strengthen math skills.
+Multiple login options
 
-History Matching Game: Engaging matching games to make learning history fun.
+Math quizzes and history matching games
 
-Settings Page: Customize app preferences, including themes and notifications.
+Progress tracking for learning achievements
 
-Progress Tracking: Track learning achievements and milestones.
+Customizable settings (themes, language)
 
-Usage
+Personalized profile with edit functionality
 
-**Sign In/Sign Up**
+Reset password functionality
 
-For first-time users, create an account using email/password or sign in through social platforms.
+**Usage**
 
-Returning users can log in with their credentials to access personalized progress and features.
+**Sign In/Sign Up
+**
+Upon opening the app, sign-in and sign-up options will appear.
 
-Accessing Features
+Sign in via email/password or social media platforms.
 
-Navigate through the intuitive dashboard to select a subject.
+For first-time users, create an account by navigating to the Sign Up tab.
 
-Choose activities like quizzes or games to start learning.
+**Math Quizzes**
+Navigate to the quizzes section to solve interactive math challenges.
 
-View progress reports to monitor achievements.
+Earn points and track progress after completing each quiz.
+
+**History Matching Games**
+Access the matching games to learn about historical events and figures.
+
+Match items to improve retention and earn rewards.
+
+**Progress Tracking**
+View your progress through the dashboard.
+
 
 **Resources Used**
 
-Design Tools:
+Icons and Animations
 
-FlutterFlow: For UI design and functionality.
+Design Tools
 
-Balsamiq: For wireframes and mockups.
+Development Tools
 
-Development Tools:
+Software and Services Used
 
-GitHub: For version control.
+GitHub: Version control and source code management.
 
-Android Studio: For coding and testing.
+FlutterFlow: UI design and app functionality development.
+
+Android Studio: Writing and testing the app code.
 
 Dependencies Used
 
@@ -54,36 +74,14 @@ Shared Preferences
 
 Provider
 
-File Structure
+License
 
-lib/: Contains the app’s Dart source code.
+The MIT License (MIT)
 
-assets/: Images, icons, and other static resources.
+Copyright © 2022
 
-pubspec.yaml: Dependencies and metadata for the Flutter project.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-analysis_options.yaml: Defines custom linting rules.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-**Contributing**
-
-We welcome contributions to Rover Academy! To contribute:
-
-**Fork the repository.**
-
-**Create a new branch:**
-
-git checkout -b feature-name
-
-**Make changes and commit:**
-
-git commit -m "Description of changes"
-
-**Push to your branch:**
-
-git push origin feature-name
-
-**Submit a pull request.**
-
-**License**
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
