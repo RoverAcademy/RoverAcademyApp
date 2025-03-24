@@ -1,15 +1,15 @@
-**Rover Academy**
+# RoverAcademy
 
 By Umer Rizwan, Samir Issa, Alex Jin
 
-Easton Area High School  
+Easton Area High School
 
 Easton, PA
 
+## Introduction
 Welcome to Rover Academy, an innovative mobile app designed to gamify learning for children. This app focuses on making education engaging and interactive, featuring subjects like math, history, science, and language arts. It is a cross-platform mobile application for Android and iOS devices, providing a seamless and fun educational experience.
 
-**Features**
-
+## Features
 Designed for Android and iOS devices
 
 Multiple login options
@@ -24,10 +24,9 @@ Personalized profile with edit functionality
 
 Reset password functionality
 
-**Usage**
+## Usage
 
-**Sign In/Sign Up
-**
+**Sign In/Sign Up**
 Upon opening the app, sign-in and sign-up options will appear.
 
 Sign in via email/password or social media platforms.
@@ -47,8 +46,7 @@ Match items to improve retention and earn rewards.
 **Progress Tracking**
 View your progress through the dashboard.
 
-
-**Resources Used**
+## Resources Used
 
 Icons and Animations
 
@@ -56,7 +54,7 @@ Design Tools
 
 Development Tools
 
-Software and Services Used
+**Software and Services Used**
 
 GitHub: Version control and source code management.
 
@@ -64,7 +62,7 @@ FlutterFlow: UI design and app functionality development.
 
 Android Studio: Writing and testing the app code.
 
-Dependencies Used
+**Dependencies Used**
 
 Flutter
 
@@ -84,4 +82,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALING
