@@ -42,11 +42,6 @@ class QuestionsRecord extends FirestoreRecord {
   String get option4 => _option4 ?? '';
   bool hasOption4() => _option4 != null;
 
-  // "question" field.
-  String? _question;
-  String get question => _question ?? '';
-  bool hasQuestion() => _question != null;
-
   // "subject" field.
   int? _subject;
   int get subject => _subject ?? 0;
@@ -57,15 +52,20 @@ class QuestionsRecord extends FirestoreRecord {
   int get grade => _grade ?? 0;
   bool hasGrade() => _grade != null;
 
+  // "question" field.
+  String? _question;
+  String get question => _question ?? '';
+  bool hasQuestion() => _question != null;
+
   void _initializeFields() {
     _correctAns = castToType<int>(snapshotData['correctAns']);
     _option1 = snapshotData['option1'] as String?;
     _option2 = snapshotData['option2'] as String?;
     _option3 = snapshotData['option3'] as String?;
     _option4 = snapshotData['option4'] as String?;
-    _question = snapshotData['question'] as String?;
     _subject = castToType<int>(snapshotData['subject']);
     _grade = castToType<int>(snapshotData['grade']);
+    _question = snapshotData['question'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -108,9 +108,9 @@ Map<String, dynamic> createQuestionsRecordData({
   String? option2,
   String? option3,
   String? option4,
-  String? question,
   int? subject,
   int? grade,
+  String? question,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -119,9 +119,9 @@ Map<String, dynamic> createQuestionsRecordData({
       'option2': option2,
       'option3': option3,
       'option4': option4,
-      'question': question,
       'subject': subject,
       'grade': grade,
+      'question': question,
     }.withoutNulls,
   );
 
@@ -138,9 +138,9 @@ class QuestionsRecordDocumentEquality implements Equality<QuestionsRecord> {
         e1?.option2 == e2?.option2 &&
         e1?.option3 == e2?.option3 &&
         e1?.option4 == e2?.option4 &&
-        e1?.question == e2?.question &&
         e1?.subject == e2?.subject &&
-        e1?.grade == e2?.grade;
+        e1?.grade == e2?.grade &&
+        e1?.question == e2?.question;
   }
 
   @override
@@ -150,9 +150,9 @@ class QuestionsRecordDocumentEquality implements Equality<QuestionsRecord> {
         e?.option2,
         e?.option3,
         e?.option4,
-        e?.question,
         e?.subject,
-        e?.grade
+        e?.grade,
+        e?.question
       ]);
 
   @override

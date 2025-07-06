@@ -81,3 +81,19 @@ int greatestNum(
   // Create a function that returns the highest of 4 numbers
   return math.max(math.max(int1, int2), math.max(int3, int4));
 }
+
+List<String> answersToList(
+  String ans1,
+  String ans2,
+  String ans3,
+  String ans4,
+) {
+  List<String> list = [];
+
+  list.add(ans1);
+  list.add(ans2);
+  list.add(ans3);
+  list.add(ans4);
+
+  return list;
+}

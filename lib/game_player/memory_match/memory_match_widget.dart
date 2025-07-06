@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:async';
 import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -17,11 +18,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'match_model.dart';
-export 'match_model.dart';
+import 'memory_match_model.dart';
+export 'memory_match_model.dart';
 
-class MatchWidget extends StatefulWidget {
-  const MatchWidget({
+class MemoryMatchWidget extends StatefulWidget {
+  const MemoryMatchWidget({
     super.key,
     required this.subject,
     required this.grade,
@@ -30,26 +31,25 @@ class MatchWidget extends StatefulWidget {
   final int? subject;
   final int? grade;
 
-  static String routeName = 'Match';
-  static String routePath = '/match';
+  static String routeName = 'MemoryMatch';
+  static String routePath = '/memoryMatch';
 
   @override
-  State<MatchWidget> createState() => _MatchWidgetState();
+  State<MemoryMatchWidget> createState() => _MemoryMatchWidgetState();
 }
 
-class _MatchWidgetState extends State<MatchWidget> {
-  late MatchModel _model;
+class _MemoryMatchWidgetState extends State<MemoryMatchWidget> {
+  late MemoryMatchModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => MatchModel());
+    _model = createModel(context, () => MemoryMatchModel());
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.randomIndexes = functions.randArrange().toList().cast<int>();
       if (widget!.subject == 4) {
         _model.unfilteredQ = await queryQuestionsRecordOnce(
           queryBuilder: (questionsRecord) => questionsRecord.where(
@@ -109,7 +109,7 @@ class _MatchWidgetState extends State<MatchWidget> {
           title: Align(
             alignment: AlignmentDirectional(0.0, 0.0),
             child: Text(
-              'Matching Game',
+              'Memory Match',
               style: FlutterFlowTheme.of(context).displaySmall.override(
                     font: GoogleFonts.inter(
                       fontWeight:
@@ -165,119 +165,28 @@ class _MatchWidgetState extends State<MatchWidget> {
                                 alignment: AlignmentDirectional(0.0, 0.0),
                                 child: Container(
                                   decoration: BoxDecoration(),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Builder(
-                                      builder: (context) {
-                                        final counter = _model.randomIndexes
-                                            .toList()
-                                            .take(12)
-                                            .toList();
-
-                                        return GridView.builder(
-                                          padding: EdgeInsets.zero,
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3,
-                                            crossAxisSpacing: 10.0,
-                                            mainAxisSpacing: 10.0,
-                                            childAspectRatio: 1.0,
-                                          ),
-                                          scrollDirection: Axis.vertical,
-                                          itemCount: counter.length,
-                                          itemBuilder: (context, counterIndex) {
-                                            final counterItem =
-                                                counter[counterIndex];
-                                            return Visibility(
-                                              visible: !_model.hidden
-                                                  .elementAtOrNull(
-                                                      counterIndex)!,
-                                              child: InkWell(
-                                                splashColor: Colors.transparent,
-                                                focusColor: Colors.transparent,
-                                                hoverColor: Colors.transparent,
-                                                highlightColor:
-                                                    Colors.transparent,
-                                                onTap: () async {
-                                                  await _model.onTileClick(
-                                                    context,
-                                                    index: counterIndex + 1,
-                                                  );
-                                                  safeSetState(() {});
-                                                },
-                                                child: Container(
-                                                  width: 100.0,
-                                                  height: 100.0,
-                                                  decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryBackground,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            24.0),
-                                                    border: Border.all(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primary,
-                                                      width:
-                                                          _model.selectedIndex ==
-                                                                  (counterIndex +
-                                                                      1)
-                                                              ? 5.0
-                                                              : 3.0,
-                                                    ),
-                                                  ),
-                                                  child: Align(
-                                                    alignment:
-                                                        AlignmentDirectional(
-                                                            0.0, 0.0),
-                                                    child: Text(
-                                                      valueOrDefault<String>(
-                                                        _model.terms
-                                                            .elementAtOrNull(
-                                                                counterItem),
-                                                        'Loading...',
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .readexPro(
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
+                                  child: Container(
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 1.0,
+                                    height:
+                                        MediaQuery.sizeOf(context).height * 1.0,
+                                    child: custom_widgets.MatchGame(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          1.0,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              1.0,
+                                      coverImage:
+                                          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/fbla-behwgp/assets/3o93tbcrh3ch/logo-hero-dog-only.png',
+                                      gridCrossAxisCount: 3,
+                                      tileAspectRatio: 1.0,
+                                      terms: _model.terms,
+                                      onGameOver:
+                                          (formattedTime, totalSeconds) async {
+                                        _model.gameOver = true;
+                                        _model.totalTime = totalSeconds;
+                                        _model.timeFormatted = formattedTime;
+                                        safeSetState(() {});
                                       },
                                     ),
                                   ),
@@ -335,121 +244,7 @@ class _MatchWidgetState extends State<MatchWidget> {
                       ),
                     ),
                   ),
-                  Container(
-                    height: MediaQuery.sizeOf(context).height * 0.81,
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 1.0),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width * 1.0,
-                            height: 200.0,
-                            decoration: BoxDecoration(
-                              color: Color(0x00FFFFFF),
-                            ),
-                            child: Align(
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: Stack(
-                                children: [
-                                  Align(
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Container(
-                                      width: 200.0,
-                                      height: 200.0,
-                                      child: Stack(
-                                        children: [
-                                          if (!_model.correct &&
-                                              _model.gameStarted)
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              child: Image.asset(
-                                                'assets/images/ChatGPT_Image_Apr_3,_2025,_01_46_27_PM_(1).png',
-                                                width: 300.0,
-                                                height: 300.0,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          if (_model.correct &&
-                                              _model.gameStarted)
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              child: Image.asset(
-                                                'assets/images/ChatGPT_Image_Apr_3,_2025,_01_09_59_PM_(1).png',
-                                                width: 300.0,
-                                                height: 300.0,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          if (!_model.gameStarted)
-                                            Align(
-                                              alignment: AlignmentDirectional(
-                                                  -1.0, 1.0),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                                child: Image.asset(
-                                                  'assets/images/Match-icon.png',
-                                                  width: 300.0,
-                                                  height: 300.0,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Opacity(
-                                    opacity: 0.0,
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0.0, 0.0),
-                                      child: InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          _model.selectedIndex = 0;
-                                          safeSetState(() {});
-                                        },
-                                        child: Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  1.0,
-                                          height: 100.0,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (((List<bool> list) {
-                        return list[0] &&
-                            list[1] &&
-                            list[2] &&
-                            list[3] &&
-                            list[4] &&
-                            list[5] &&
-                            list[6] &&
-                            list[7] &&
-                            list[8] &&
-                            list[9] &&
-                            list[10] &&
-                            list[11];
-                      }(_model.hidden.toList())) ||
-                      (_model.timerMilliseconds != 0))
+                  if (_model.gameOver || (_model.timerMilliseconds != 0))
                     Container(
                       width: MediaQuery.sizeOf(context).width * 1.0,
                       height: MediaQuery.sizeOf(context).height * 1.0,
@@ -565,20 +360,7 @@ class _MatchWidgetState extends State<MatchWidget> {
                         ],
                       ),
                     ),
-                  if ((List<bool> list) {
-                    return list[0] &&
-                        list[1] &&
-                        list[2] &&
-                        list[3] &&
-                        list[4] &&
-                        list[5] &&
-                        list[6] &&
-                        list[7] &&
-                        list[8] &&
-                        list[9] &&
-                        list[10] &&
-                        list[11];
-                  }(_model.hidden.toList()))
+                  if (_model.gameOver)
                     Align(
                       alignment: AlignmentDirectional(0.0, 0.0),
                       child: Material(
@@ -658,11 +440,8 @@ class _MatchWidgetState extends State<MatchWidget> {
                                 ),
                               ),
                               Text(
-                                'Your final score was: ${((List<bool> list) {
-                                  return list
-                                      .where((element) => element)
-                                      .length;
-                                }(_model.isMatched.toList())).toString()}/6',
+                                'You completed the game in ${_model.timeFormatted} minutes!',
+                                textAlign: TextAlign.center,
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -693,95 +472,11 @@ class _MatchWidgetState extends State<MatchWidget> {
                                           AlignmentDirectional(-1.0, 0.0),
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            10.0, 30.0, 0.0, 0.0),
+                                            10.0, 10.0, 0.0, 0.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            _model.score = valueOrDefault<int>(
-                                              (List<bool> list) {
-                                                return list
-                                                    .where((element) => element)
-                                                    .length;
-                                              }(_model.isMatched.toList()),
-                                              0,
-                                            );
-                                            safeSetState(() {});
-                                            if (widget!.subject == 0) {
-                                              await currentUserReference!
-                                                  .update({
-                                                ...mapToFirestore(
-                                                  {
-                                                    'mathLargeScore':
-                                                        FieldValue.increment(
-                                                            _model.score!),
-                                                  },
-                                                ),
-                                              });
-                                            } else {
-                                              if (widget!.subject == 1) {
-                                                await currentUserReference!
-                                                    .update({
-                                                  ...mapToFirestore(
-                                                    {
-                                                      'historyLargeScore':
-                                                          FieldValue.increment(
-                                                              _model.score!),
-                                                    },
-                                                  ),
-                                                });
-                                              } else {
-                                                if (widget!.subject == 2) {
-                                                  await currentUserReference!
-                                                      .update({
-                                                    ...mapToFirestore(
-                                                      {
-                                                        'englishLargeScore':
-                                                            FieldValue.increment(
-                                                                _model.score!),
-                                                      },
-                                                    ),
-                                                  });
-                                                } else {
-                                                  await currentUserReference!
-                                                      .update({
-                                                    ...mapToFirestore(
-                                                      {
-                                                        'scienceLargeScore':
-                                                            FieldValue.increment(
-                                                                _model.score!),
-                                                      },
-                                                    ),
-                                                  });
-                                                }
-                                              }
-                                            }
-
-                                            context.pushNamed(
-                                                HomeWidget.routeName);
-
                                             unawaited(
-                                              () async {
-                                                await currentUserReference!.update(
-                                                    createUserDetailsRecordData(
-                                                  latestScore: _model.score,
-                                                  totalPoints: (valueOrDefault(
-                                                              currentUserDocument
-                                                                  ?.mathLargeScore,
-                                                              0) +
-                                                          valueOrDefault(
-                                                              currentUserDocument
-                                                                  ?.englishLargeScore,
-                                                              0) +
-                                                          valueOrDefault(
-                                                              currentUserDocument
-                                                                  ?.historyLargeScore,
-                                                              0) +
-                                                          valueOrDefault(
-                                                              currentUserDocument
-                                                                  ?.scienceLargeScore,
-                                                              0))
-                                                      .toInt(),
-                                                ));
-                                              }(),
+                                              () async {}(),
                                             );
 
                                             context.pushNamed(
@@ -840,61 +535,11 @@ class _MatchWidgetState extends State<MatchWidget> {
                                       alignment: AlignmentDirectional(1.0, 0.0),
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 40.0, 10.0, 0.0),
+                                            0.0, 10.0, 10.0, 0.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            if (widget!.subject == 0) {
-                                              await currentUserReference!
-                                                  .update({
-                                                ...mapToFirestore(
-                                                  {
-                                                    'mathLargeScore':
-                                                        FieldValue.increment(
-                                                            _model.score!),
-                                                  },
-                                                ),
-                                              });
-                                            } else {
-                                              if (widget!.subject == 1) {
-                                                await currentUserReference!
-                                                    .update({
-                                                  ...mapToFirestore(
-                                                    {
-                                                      'historyLargeScore':
-                                                          FieldValue.increment(
-                                                              _model.score!),
-                                                    },
-                                                  ),
-                                                });
-                                              } else {
-                                                if (widget!.subject == 2) {
-                                                  await currentUserReference!
-                                                      .update({
-                                                    ...mapToFirestore(
-                                                      {
-                                                        'englishLargeScore':
-                                                            FieldValue.increment(
-                                                                _model.score!),
-                                                      },
-                                                    ),
-                                                  });
-                                                } else {
-                                                  await currentUserReference!
-                                                      .update({
-                                                    ...mapToFirestore(
-                                                      {
-                                                        'scienceLargeScore':
-                                                            FieldValue.increment(
-                                                                _model.score!),
-                                                      },
-                                                    ),
-                                                  });
-                                                }
-                                              }
-                                            }
-
                                             context.goNamed(
-                                              MatchWidget.routeName,
+                                              MemoryMatchWidget.routeName,
                                               queryParameters: {
                                                 'subject': serializeParam(
                                                   widget!.subject,

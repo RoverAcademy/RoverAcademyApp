@@ -21,3 +21,6 @@ export '/options/account/account_widget.dart' show AccountWidget;
 export '/grade_selection/grade_selection_widget.dart' show GradeSelectionWidget;
 export '/game_selection/game_selection_widget.dart' show GameSelectionWidget;
 export '/rover_buddy/rover_buddy_widget.dart' show RoverBuddyWidget;
+export '/game_player/memory_match/memory_match_widget.dart'
+    show MemoryMatchWidget;
+export '/game_player/puzzle_pop/puzzle_pop_widget.dart' show PuzzlePopWidget;

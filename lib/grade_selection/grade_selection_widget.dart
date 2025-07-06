@@ -78,11 +78,17 @@ class _GradeSelectionWidgetState extends State<GradeSelectionWidget> {
             child: Text(
               'Pick a grade level',
               style: FlutterFlowTheme.of(context).headlineMedium.override(
-                    fontFamily: 'Outfit',
+                    font: GoogleFonts.outfit(
+                      fontWeight: FontWeight.normal,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).headlineMedium.fontStyle,
+                    ),
                     color: FlutterFlowTheme.of(context).primaryText,
                     fontSize: 22.0,
                     letterSpacing: 0.0,
                     fontWeight: FontWeight.normal,
+                    fontStyle:
+                        FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                   ),
             ),
           ),
@@ -124,10 +130,10 @@ class _GradeSelectionWidgetState extends State<GradeSelectionWidget> {
                       colors: [
                         FlutterFlowTheme.of(context).primaryBackground,
                         Theme.of(context).brightness == Brightness.dark
-                            ? FlutterFlowTheme.of(context).primaryBackground
+                            ? Color(0xFF1A0000)
                             : Color(0xFFFFFEE1),
                         Theme.of(context).brightness == Brightness.dark
-                            ? FlutterFlowTheme.of(context).primaryBackground
+                            ? Color(0xFF330000)
                             : Color(0xFFFFD5A0)
                       ],
                       stops: [0.0, 0.5, 1.0],
@@ -259,8 +265,17 @@ class _GradeSelectionWidgetState extends State<GradeSelectionWidget> {
                                                               .of(context)
                                                           .titleLarge
                                                           .override(
-                                                            fontFamily:
-                                                                'Outfit',
+                                                            font: GoogleFonts
+                                                                .outfit(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleLarge
+                                                                      .fontStyle,
+                                                            ),
                                                             color: FlutterFlowTheme
                                                                     .of(context)
                                                                 .primaryText,
@@ -268,6 +283,11 @@ class _GradeSelectionWidgetState extends State<GradeSelectionWidget> {
                                                             letterSpacing: 0.0,
                                                             fontWeight:
                                                                 FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleLarge
+                                                                    .fontStyle,
                                                           ),
                                                     ),
                                                   ],

@@ -221,6 +221,34 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'RoverBuddy')
               : RoverBuddyWidget(),
+        ),
+        FFRoute(
+          name: MemoryMatchWidget.routeName,
+          path: MemoryMatchWidget.routePath,
+          builder: (context, params) => MemoryMatchWidget(
+            subject: params.getParam(
+              'subject',
+              ParamType.int,
+            ),
+            grade: params.getParam(
+              'grade',
+              ParamType.int,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: PuzzlePopWidget.routeName,
+          path: PuzzlePopWidget.routePath,
+          builder: (context, params) => PuzzlePopWidget(
+            subject: params.getParam(
+              'subject',
+              ParamType.int,
+            ),
+            grade: params.getParam(
+              'grade',
+              ParamType.int,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

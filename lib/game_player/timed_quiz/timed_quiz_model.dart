@@ -48,10 +48,21 @@ class TimedQuizModel extends FlutterFlowModel<TimedQuizWidget> {
           int index, Function(QuestionsRecord) updateFn) =>
       questionList[index] = updateFn(questionList[index]);
 
+  List<int> correct = [2, 2, 2, 2];
+  void addToCorrect(int item) => correct.add(item);
+  void removeFromCorrect(int item) => correct.remove(item);
+  void removeAtIndexFromCorrect(int index) => correct.removeAt(index);
+  void insertAtIndexInCorrect(int index, int item) =>
+      correct.insert(index, item);
+  void updateCorrectAtIndex(int index, Function(int) updateFn) =>
+      correct[index] = updateFn(correct[index]);
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Firestore Query - Query a collection] action in TimedQuiz widget.
-  List<QuestionsRecord>? questions;
+  List<QuestionsRecord>? unfilteredQ;
+  // Stores action output result for [Firestore Query - Query a collection] action in TimedQuiz widget.
+  List<QuestionsRecord>? filteredQ;
   // State field(s) for Timer widget.
   final timerInitialTimeMs = 0;
   int timerMilliseconds = 0;
@@ -62,6 +73,15 @@ class TimedQuizModel extends FlutterFlowModel<TimedQuizWidget> {
   );
   FlutterFlowTimerController timerController =
       FlutterFlowTimerController(StopWatchTimer(mode: StopWatchMode.countDown));
+
+  // Stores action output result for [Action Block - VerifyAns] action in Button widget.
+  bool? isCorrect;
+  // Stores action output result for [Action Block - VerifyAns] action in Button widget.
+  bool? isCorrect1;
+  // Stores action output result for [Action Block - VerifyAns] action in Button widget.
+  bool? isCorrect2;
+  // Stores action output result for [Action Block - VerifyAns] action in Button widget.
+  bool? isCorrect3;
 
   @override
   void initState(BuildContext context) {}
@@ -74,7 +94,7 @@ class TimedQuizModel extends FlutterFlowModel<TimedQuizWidget> {
   /// Action blocks.
   /// Verifies correct answer when one of the options is selected and generates
   /// a new question
-  Future verifyAns(
+  Future<bool?> verifyAns(
     BuildContext context, {
     required int? option,
   }) async {
@@ -97,17 +117,13 @@ class TimedQuizModel extends FlutterFlowModel<TimedQuizWidget> {
           },
         ),
       });
+      return true;
     } else {
       await currentUserReference!.update(createUserDetailsRecordData(
         currentStreak: 0,
       ));
+      return false;
     }
-
-    updateScoreAtIndex(
-      1,
-      (e) => e + 1,
-    );
-    await getQuestion(context);
   }
 
   Future getQuestion(BuildContext context) async {

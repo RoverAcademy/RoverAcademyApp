@@ -107,6 +107,11 @@ class UserDetailsRecord extends FirestoreRecord {
   int get totalPoints => _totalPoints ?? 0;
   bool hasTotalPoints() => _totalPoints != null;
 
+  // "isAvailable" field.
+  bool? _isAvailable;
+  bool get isAvailable => _isAvailable ?? false;
+  bool hasIsAvailable() => _isAvailable != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _password = snapshotData['password'] as String?;
@@ -126,6 +131,7 @@ class UserDetailsRecord extends FirestoreRecord {
     _lastGameWasReading = snapshotData['lastGameWasReading'] as bool?;
     _lastGameWasHistory = snapshotData['lastGameWasHistory'] as bool?;
     _totalPoints = castToType<int>(snapshotData['totalPoints']);
+    _isAvailable = snapshotData['isAvailable'] as bool?;
   }
 
   static CollectionReference get collection =>
@@ -181,6 +187,7 @@ Map<String, dynamic> createUserDetailsRecordData({
   bool? lastGameWasReading,
   bool? lastGameWasHistory,
   int? totalPoints,
+  bool? isAvailable,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -202,6 +209,7 @@ Map<String, dynamic> createUserDetailsRecordData({
       'lastGameWasReading': lastGameWasReading,
       'lastGameWasHistory': lastGameWasHistory,
       'totalPoints': totalPoints,
+      'isAvailable': isAvailable,
     }.withoutNulls,
   );
 
@@ -230,7 +238,8 @@ class UserDetailsRecordDocumentEquality implements Equality<UserDetailsRecord> {
         e1?.latestScore == e2?.latestScore &&
         e1?.lastGameWasReading == e2?.lastGameWasReading &&
         e1?.lastGameWasHistory == e2?.lastGameWasHistory &&
-        e1?.totalPoints == e2?.totalPoints;
+        e1?.totalPoints == e2?.totalPoints &&
+        e1?.isAvailable == e2?.isAvailable;
   }
 
   @override
@@ -252,7 +261,8 @@ class UserDetailsRecordDocumentEquality implements Equality<UserDetailsRecord> {
         e?.latestScore,
         e?.lastGameWasReading,
         e?.lastGameWasHistory,
-        e?.totalPoints
+        e?.totalPoints,
+        e?.isAvailable
       ]);
 
   @override

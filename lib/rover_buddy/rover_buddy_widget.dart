@@ -15,6 +15,7 @@ import '/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -93,11 +94,19 @@ class _RoverBuddyWidgetState extends State<RoverBuddyWidget> {
                 child: Text(
                   currentUserEmail,
                   style: FlutterFlowTheme.of(context).headlineMedium.override(
-                        fontFamily: 'Outfit',
+                        font: GoogleFonts.outfit(
+                          fontWeight: FontWeight.normal,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .fontStyle,
+                        ),
                         color: FlutterFlowTheme.of(context).primaryText,
                         fontSize: 22.0,
                         letterSpacing: 0.0,
                         fontWeight: FontWeight.normal,
+                        fontStyle: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .fontStyle,
                       ),
                 ),
               ),
@@ -141,10 +150,10 @@ class _RoverBuddyWidgetState extends State<RoverBuddyWidget> {
                         colors: [
                           FlutterFlowTheme.of(context).primaryBackground,
                           Theme.of(context).brightness == Brightness.dark
-                              ? FlutterFlowTheme.of(context).primaryBackground
+                              ? Color(0xFF1A0000)
                               : Color(0xFFFFFEE1),
                           Theme.of(context).brightness == Brightness.dark
-                              ? FlutterFlowTheme.of(context).primaryBackground
+                              ? Color(0xFF330000)
                               : Color(0xFFFFD5A0)
                         ],
                         stops: [0.0, 0.5, 1.0],
@@ -281,6 +290,7 @@ class _RoverBuddyWidgetState extends State<RoverBuddyWidget> {
                                                             padding:
                                                                 EdgeInsets.zero,
                                                             reverse: true,
+                                                            primary: false,
                                                             scrollDirection:
                                                                 Axis.vertical,
                                                             itemCount:
@@ -421,14 +431,34 @@ class _RoverBuddyWidgetState extends State<RoverBuddyWidget> {
                                             decoration: InputDecoration(
                                               hintText:
                                                   'Your buddy is ready to answer any academic questions',
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
-                                                        letterSpacing: 0.0,
-                                                      ),
+                                              hintStyle: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodySmall
+                                                  .override(
+                                                    font: GoogleFonts.readexPro(
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodySmall
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodySmall
+                                                              .fontStyle,
+                                                    ),
+                                                    letterSpacing: 0.0,
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodySmall
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodySmall
+                                                            .fontStyle,
+                                                  ),
                                               enabledBorder:
                                                   UnderlineInputBorder(
                                                 borderSide: BorderSide(
@@ -484,11 +514,32 @@ class _RoverBuddyWidgetState extends State<RoverBuddyWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  fontFamily: 'Readex Pro',
+                                                  font: GoogleFonts.readexPro(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .secondaryText,
                                                   letterSpacing: 0.0,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
                                                 ),
                                             maxLines: 3,
                                             minLines: 1,
@@ -497,6 +548,20 @@ class _RoverBuddyWidgetState extends State<RoverBuddyWidget> {
                                             validator: _model
                                                 .promptTextControllerValidator
                                                 .asValidator(context),
+                                            inputFormatters: [
+                                              if (!isAndroid && !isiOS)
+                                                TextInputFormatter.withFunction(
+                                                    (oldValue, newValue) {
+                                                  return TextEditingValue(
+                                                    selection:
+                                                        newValue.selection,
+                                                    text: newValue.text
+                                                        .toCapitalization(
+                                                            TextCapitalization
+                                                                .sentences),
+                                                  );
+                                                }),
+                                            ],
                                           ),
                                         ),
                                       ),

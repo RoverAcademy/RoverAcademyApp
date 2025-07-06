@@ -69,7 +69,7 @@ class MatchModel extends FlutterFlowModel<MatchWidget> {
   void updateTermsAtIndex(int index, Function(String) updateFn) =>
       terms[index] = updateFn(terms[index]);
 
-  List<int> randomIndexes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  List<int> randomIndexes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   void addToRandomIndexes(int item) => randomIndexes.add(item);
   void removeFromRandomIndexes(int item) => randomIndexes.remove(item);
   void removeAtIndexFromRandomIndexes(int index) =>
@@ -81,10 +81,14 @@ class MatchModel extends FlutterFlowModel<MatchWidget> {
 
   bool gameStarted = false;
 
+  dynamic test;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Firestore Query - Query a collection] action in Match widget.
-  List<QuestionsRecord>? questions;
+  List<QuestionsRecord>? unfilteredQ;
+  // Stores action output result for [Firestore Query - Query a collection] action in Match widget.
+  List<QuestionsRecord>? filteredQ;
   // State field(s) for Timer widget.
   final timerInitialTimeMs = 5000;
   int timerMilliseconds = 5000;
@@ -151,6 +155,8 @@ class MatchModel extends FlutterFlowModel<MatchWidget> {
 
         selectedIndex = 0;
         gameStarted = true;
+      } else {
+        selectedIndex = 0;
       }
     }
   }

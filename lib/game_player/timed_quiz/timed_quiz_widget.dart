@@ -54,18 +54,31 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.questions = await queryQuestionsRecordOnce(
-        queryBuilder: (questionsRecord) => questionsRecord
-            .where(
-              'subject',
-              isEqualTo: widget!.subject,
-            )
-            .where(
-              'grade',
-              isEqualTo: widget!.grade,
-            ),
-      );
-      _model.questionList = _model.questions!.toList().cast<QuestionsRecord>();
+      if (widget!.subject == 4) {
+        _model.unfilteredQ = await queryQuestionsRecordOnce(
+          queryBuilder: (questionsRecord) => questionsRecord.where(
+            'grade',
+            isEqualTo: widget!.grade,
+          ),
+        );
+        _model.questionList =
+            _model.unfilteredQ!.toList().cast<QuestionsRecord>();
+      } else {
+        _model.filteredQ = await queryQuestionsRecordOnce(
+          queryBuilder: (questionsRecord) => questionsRecord
+              .where(
+                'subject',
+                isEqualTo: widget!.subject,
+              )
+              .where(
+                'grade',
+                isEqualTo: widget!.grade,
+              ),
+        );
+        _model.questionList =
+            _model.filteredQ!.toList().cast<QuestionsRecord>();
+      }
+
       await _model.getQuestion(context);
       safeSetState(() {});
       _model.timerController.onStartTimer();
@@ -120,8 +133,17 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
             child: Text(
               'Timed Quiz',
               style: FlutterFlowTheme.of(context).displaySmall.override(
-                    fontFamily: 'Inter',
+                    font: GoogleFonts.inter(
+                      fontWeight:
+                          FlutterFlowTheme.of(context).displaySmall.fontWeight,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).displaySmall.fontStyle,
+                    ),
                     letterSpacing: 0.0,
+                    fontWeight:
+                        FlutterFlowTheme.of(context).displaySmall.fontWeight,
+                    fontStyle:
+                        FlutterFlowTheme.of(context).displaySmall.fontStyle,
                   ),
             ),
           ),
@@ -137,10 +159,10 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                 colors: [
                   FlutterFlowTheme.of(context).primaryBackground,
                   Theme.of(context).brightness == Brightness.dark
-                      ? FlutterFlowTheme.of(context).primaryBackground
+                      ? Color(0xFF1A0000)
                       : Color(0xFFFFFEE1),
                   Theme.of(context).brightness == Brightness.dark
-                      ? FlutterFlowTheme.of(context).primaryBackground
+                      ? Color(0xFF330000)
                       : Color(0xFFFFD5A0)
                 ],
                 stops: [0.0, 0.5, 1.0],
@@ -192,10 +214,27 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                       style: FlutterFlowTheme.of(context)
                                           .displaySmall
                                           .override(
-                                            fontFamily: 'Inter',
+                                            font: GoogleFonts.inter(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .displaySmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .displaySmall
+                                                      .fontStyle,
+                                            ),
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
                                             letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .displaySmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .displaySmall
+                                                    .fontStyle,
                                           ),
                                     ),
                                   ),
@@ -250,22 +289,52 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .displayLarge
                                         .override(
-                                          fontFamily: 'Roboto',
+                                          font: GoogleFonts.roboto(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .displayLarge
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .displayLarge
+                                                    .fontStyle,
+                                          ),
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
                                           fontSize: 30.0,
                                           letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .displayLarge
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .displayLarge
+                                                  .fontStyle,
                                         ),
                                   )
                                 ],
                                 style: FlutterFlowTheme.of(context)
                                     .displayLarge
                                     .override(
-                                      fontFamily: 'Roboto',
+                                      font: GoogleFonts.roboto(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .displayLarge
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .displayLarge
+                                            .fontStyle,
+                                      ),
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
                                       fontSize: 30.0,
                                       letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .displayLarge
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .displayLarge
+                                          .fontStyle,
                                     ),
                               ),
                               textAlign: TextAlign.center,
@@ -276,10 +345,31 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                 0.0, 10.0, 0.0, 0.0),
                             child: FFButtonWidget(
                               onPressed: () async {
-                                await _model.verifyAns(
+                                _model.timerController.onStopTimer();
+                                _model.isCorrect = await _model.verifyAns(
                                   context,
                                   option: 0,
                                 );
+                                _model.updateCorrectAtIndex(
+                                  _model.problem!.correctAns,
+                                  (_) => 1,
+                                );
+                                _model.updateCorrectAtIndex(
+                                  0,
+                                  (_) => _model.isCorrect! ? 1 : 0,
+                                );
+                                safeSetState(() {});
+                                await Future.delayed(
+                                    const Duration(milliseconds: 2000));
+                                _model.updateScoreAtIndex(
+                                  1,
+                                  (e) => e + 1,
+                                );
+                                await _model.getQuestion(context);
+                                _model.correct = [2, 2, 2, 2];
+                                safeSetState(() {});
+                                _model.timerController.onStartTimer();
+
                                 safeSetState(() {});
                               },
                               text: valueOrDefault<String>(
@@ -293,19 +383,49 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                     16.0, 0.0, 16.0, 0.0),
                                 iconPadding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: () {
+                                  if (_model.correct.firstOrNull == 2) {
+                                    return FlutterFlowTheme.of(context)
+                                        .secondaryBackground;
+                                  } else if (_model.correct.firstOrNull == 1) {
+                                    return FlutterFlowTheme.of(context).success;
+                                  } else {
+                                    return FlutterFlowTheme.of(context).error;
+                                  }
+                                }(),
                                 textStyle: FlutterFlowTheme.of(context)
                                     .titleSmall
                                     .override(
-                                      fontFamily: 'Readex Pro',
-                                      color: Colors.white,
+                                      font: GoogleFonts.readexPro(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontStyle,
+                                      ),
+                                      color: _model.correct.firstOrNull != 2
+                                          ? Colors.white
+                                          : FlutterFlowTheme.of(context)
+                                              .primaryText,
                                       letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
                                     ),
                                 elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: _model.correct.firstOrNull != 2
+                                      ? Colors.transparent
+                                      : FlutterFlowTheme.of(context).alternate,
+                                  width: 2.0,
+                                ),
                                 borderRadius: BorderRadius.circular(24.0),
-                                hoverColor: Color(0xDEE70003),
-                                hoverElevation: 10.0,
                               ),
+                              showLoadingIndicator: false,
                             ).animateOnActionTrigger(
                               animationsMap['buttonOnActionTriggerAnimation']!,
                             ),
@@ -315,10 +435,32 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                 0.0, 10.0, 0.0, 0.0),
                             child: FFButtonWidget(
                               onPressed: () async {
-                                await _model.verifyAns(
+                                _model.timerController.onStopTimer();
+                                _model.isCorrect1 = await _model.verifyAns(
                                   context,
                                   option: 1,
                                 );
+                                _model.updateCorrectAtIndex(
+                                  _model.problem!.correctAns,
+                                  (_) => 1,
+                                );
+                                _model.updateCorrectAtIndex(
+                                  1,
+                                  (_) => _model.isCorrect1! ? 1 : 0,
+                                );
+                                safeSetState(() {});
+                                await Future.delayed(
+                                    const Duration(milliseconds: 2000));
+                                _model.updateScoreAtIndex(
+                                  1,
+                                  (e) => e + 1,
+                                );
+                                safeSetState(() {});
+                                await _model.getQuestion(context);
+                                _model.correct = [2, 2, 2, 2];
+                                safeSetState(() {});
+                                _model.timerController.onStartTimer();
+
                                 safeSetState(() {});
                               },
                               text: valueOrDefault<String>(
@@ -332,19 +474,52 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                     16.0, 0.0, 16.0, 0.0),
                                 iconPadding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: () {
+                                  if (_model.correct.elementAtOrNull(1) == 2) {
+                                    return FlutterFlowTheme.of(context)
+                                        .secondaryBackground;
+                                  } else if (_model.correct
+                                          .elementAtOrNull(1) ==
+                                      1) {
+                                    return FlutterFlowTheme.of(context).success;
+                                  } else {
+                                    return FlutterFlowTheme.of(context).error;
+                                  }
+                                }(),
                                 textStyle: FlutterFlowTheme.of(context)
                                     .titleSmall
                                     .override(
-                                      fontFamily: 'Readex Pro',
-                                      color: Colors.white,
+                                      font: GoogleFonts.readexPro(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontStyle,
+                                      ),
+                                      color:
+                                          _model.correct.elementAtOrNull(1) != 2
+                                              ? Colors.white
+                                              : FlutterFlowTheme.of(context)
+                                                  .primaryText,
                                       letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
                                     ),
                                 elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: _model.correct.elementAtOrNull(1) != 2
+                                      ? Colors.transparent
+                                      : FlutterFlowTheme.of(context).alternate,
+                                  width: 2.0,
+                                ),
                                 borderRadius: BorderRadius.circular(24.0),
-                                hoverColor: Color(0xDEE70003),
-                                hoverElevation: 10.0,
                               ),
+                              showLoadingIndicator: false,
                             ),
                           ),
                           Padding(
@@ -352,10 +527,32 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                 0.0, 10.0, 0.0, 0.0),
                             child: FFButtonWidget(
                               onPressed: () async {
-                                await _model.verifyAns(
+                                _model.timerController.onStopTimer();
+                                _model.isCorrect2 = await _model.verifyAns(
                                   context,
                                   option: 2,
                                 );
+                                _model.updateCorrectAtIndex(
+                                  _model.problem!.correctAns,
+                                  (_) => 1,
+                                );
+                                _model.updateCorrectAtIndex(
+                                  2,
+                                  (_) => _model.isCorrect2! ? 1 : 0,
+                                );
+                                safeSetState(() {});
+                                await Future.delayed(
+                                    const Duration(milliseconds: 2000));
+                                _model.updateScoreAtIndex(
+                                  1,
+                                  (e) => e + 1,
+                                );
+                                safeSetState(() {});
+                                await _model.getQuestion(context);
+                                _model.correct = [2, 2, 2, 2];
+                                safeSetState(() {});
+                                _model.timerController.onStartTimer();
+
                                 safeSetState(() {});
                               },
                               text: valueOrDefault<String>(
@@ -369,19 +566,52 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                     16.0, 0.0, 16.0, 0.0),
                                 iconPadding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: () {
+                                  if (_model.correct.elementAtOrNull(2) == 2) {
+                                    return FlutterFlowTheme.of(context)
+                                        .secondaryBackground;
+                                  } else if (_model.correct
+                                          .elementAtOrNull(2) ==
+                                      1) {
+                                    return FlutterFlowTheme.of(context).success;
+                                  } else {
+                                    return FlutterFlowTheme.of(context).error;
+                                  }
+                                }(),
                                 textStyle: FlutterFlowTheme.of(context)
                                     .titleSmall
                                     .override(
-                                      fontFamily: 'Readex Pro',
-                                      color: Colors.white,
+                                      font: GoogleFonts.readexPro(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontStyle,
+                                      ),
+                                      color:
+                                          _model.correct.elementAtOrNull(2) != 2
+                                              ? Colors.white
+                                              : FlutterFlowTheme.of(context)
+                                                  .primaryText,
                                       letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
                                     ),
                                 elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: _model.correct.elementAtOrNull(2) != 2
+                                      ? Colors.transparent
+                                      : FlutterFlowTheme.of(context).alternate,
+                                  width: 2.0,
+                                ),
                                 borderRadius: BorderRadius.circular(24.0),
-                                hoverColor: Color(0xDEE70003),
-                                hoverElevation: 10.0,
                               ),
+                              showLoadingIndicator: false,
                             ),
                           ),
                           Padding(
@@ -389,10 +619,32 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                 0.0, 10.0, 0.0, 0.0),
                             child: FFButtonWidget(
                               onPressed: () async {
-                                await _model.verifyAns(
+                                _model.timerController.onStopTimer();
+                                _model.isCorrect3 = await _model.verifyAns(
                                   context,
                                   option: 3,
                                 );
+                                _model.updateCorrectAtIndex(
+                                  _model.problem!.correctAns,
+                                  (_) => 1,
+                                );
+                                _model.updateCorrectAtIndex(
+                                  3,
+                                  (_) => _model.isCorrect3! ? 1 : 0,
+                                );
+                                safeSetState(() {});
+                                await Future.delayed(
+                                    const Duration(milliseconds: 2000));
+                                _model.updateScoreAtIndex(
+                                  1,
+                                  (e) => e + 1,
+                                );
+                                safeSetState(() {});
+                                await _model.getQuestion(context);
+                                _model.correct = [2, 2, 2, 2];
+                                safeSetState(() {});
+                                _model.timerController.onStartTimer();
+
                                 safeSetState(() {});
                               },
                               text: valueOrDefault<String>(
@@ -406,19 +658,49 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                     16.0, 0.0, 16.0, 0.0),
                                 iconPadding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: () {
+                                  if (_model.correct.lastOrNull == 2) {
+                                    return FlutterFlowTheme.of(context)
+                                        .secondaryBackground;
+                                  } else if (_model.correct.lastOrNull == 1) {
+                                    return FlutterFlowTheme.of(context).success;
+                                  } else {
+                                    return FlutterFlowTheme.of(context).error;
+                                  }
+                                }(),
                                 textStyle: FlutterFlowTheme.of(context)
                                     .titleSmall
                                     .override(
-                                      fontFamily: 'Readex Pro',
-                                      color: Colors.white,
+                                      font: GoogleFonts.readexPro(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontStyle,
+                                      ),
+                                      color: _model.correct.lastOrNull != 2
+                                          ? Colors.white
+                                          : FlutterFlowTheme.of(context)
+                                              .primaryText,
                                       letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
                                     ),
                                 elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: _model.correct.lastOrNull != 2
+                                      ? Colors.transparent
+                                      : FlutterFlowTheme.of(context).alternate,
+                                  width: 2.0,
+                                ),
                                 borderRadius: BorderRadius.circular(24.0),
-                                hoverColor: Color(0xDEE70003),
-                                hoverElevation: 10.0,
                               ),
+                              showLoadingIndicator: false,
                             ),
                           ),
                           Padding(
@@ -435,11 +717,28 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
                                           fontSize: 30.0,
                                           letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                         ),
                                   ),
                                 ),
@@ -448,11 +747,26 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Readex Pro',
+                                        font: GoogleFonts.readexPro(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
                                         fontSize: 30.0,
                                         letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
                                       ),
                                 ),
                               ],
@@ -479,9 +793,26 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                     textStyle: FlutterFlowTheme.of(context)
                                         .titleSmall
                                         .override(
-                                          fontFamily: 'Readex Pro',
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontStyle,
+                                          ),
                                           color: Colors.white,
                                           letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontStyle,
                                         ),
                                     elevation: 0.0,
                                     borderRadius: BorderRadius.circular(20.0),
@@ -502,12 +833,10 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                               colors: [
                                 FlutterFlowTheme.of(context).primaryBackground,
                                 Theme.of(context).brightness == Brightness.dark
-                                    ? FlutterFlowTheme.of(context)
-                                        .primaryBackground
+                                    ? Color(0xFF1A0000)
                                     : Color(0xFFFFFEE1),
                                 Theme.of(context).brightness == Brightness.dark
-                                    ? FlutterFlowTheme.of(context)
-                                        .primaryBackground
+                                    ? Color(0xFF330000)
                                     : Color(0xFFFFD5A0)
                               ],
                               stops: [0.0, 0.5, 1.0],
@@ -535,8 +864,25 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                       style: FlutterFlowTheme.of(context)
                                           .displaySmall
                                           .override(
-                                            fontFamily: 'Inter',
+                                            font: GoogleFonts.inter(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .displaySmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .displaySmall
+                                                      .fontStyle,
+                                            ),
                                             letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .displaySmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .displaySmall
+                                                    .fontStyle,
                                           ),
                                     ),
                                   ),
@@ -562,8 +908,25 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                       style: FlutterFlowTheme.of(context)
                                           .displaySmall
                                           .override(
-                                            fontFamily: 'Inter',
+                                            font: GoogleFonts.inter(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .displaySmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .displaySmall
+                                                      .fontStyle,
+                                            ),
                                             letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .displaySmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .displaySmall
+                                                    .fontStyle,
                                           ),
                                     ),
                                   ),
@@ -642,9 +1005,26 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              fontFamily: 'Readex Pro',
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
                                               fontSize: 20.0,
                                               letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
                                             ),
                                       ),
                                     ),
@@ -654,9 +1034,26 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
                                           fontSize: 17.0,
                                           letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
                                         ),
                                   ),
                                   Row(
@@ -763,15 +1160,36 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                                         .fromSTEB(
                                                             0.0, 0.0, 0.0, 0.0),
                                                 color: Colors.black,
-                                                textStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleSmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: Colors.white,
-                                                          letterSpacing: 0.0,
-                                                        ),
+                                                textStyle: FlutterFlowTheme.of(
+                                                        context)
+                                                    .titleSmall
+                                                    .override(
+                                                      font:
+                                                          GoogleFonts.readexPro(
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleSmall
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleSmall
+                                                                .fontStyle,
+                                                      ),
+                                                      color: Colors.white,
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleSmall
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleSmall
+                                                              .fontStyle,
+                                                    ),
                                                 elevation: 0.0,
                                                 borderRadius:
                                                     BorderRadius.circular(20.0),
@@ -864,7 +1282,7 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                                   }.withoutNulls,
                                                 );
                                               },
-                                              text: 'Replay',
+                                              text: 'Play Again',
                                               options: FFButtonOptions(
                                                 height: 40.0,
                                                 padding: EdgeInsetsDirectional
@@ -875,15 +1293,36 @@ class _TimedQuizWidgetState extends State<TimedQuizWidget>
                                                         .fromSTEB(
                                                             0.0, 0.0, 0.0, 0.0),
                                                 color: Colors.black,
-                                                textStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleSmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: Colors.white,
-                                                          letterSpacing: 0.0,
-                                                        ),
+                                                textStyle: FlutterFlowTheme.of(
+                                                        context)
+                                                    .titleSmall
+                                                    .override(
+                                                      font:
+                                                          GoogleFonts.readexPro(
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleSmall
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleSmall
+                                                                .fontStyle,
+                                                      ),
+                                                      color: Colors.white,
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleSmall
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleSmall
+                                                              .fontStyle,
+                                                    ),
                                                 elevation: 0.0,
                                                 borderRadius:
                                                     BorderRadius.circular(20.0),
